@@ -1,0 +1,48 @@
+Version: v1
+kind: Service
+metadata:
+  name: redmine
+spec:
+  selector:
+    app: redmine
+  type: NodePort
+  ports:
+  - protocol : TCP
+    port: 80
+    nodePort: 31000
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redmine
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redmine
+    spec:
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+      containers:
+        - name: redmine
+          image: registry.eu-de.bluemix.net/ptpt/redmine
+          env:
+            - name: DB_ADAPTER
+              value: "mysql2"
+            - name: DB_HOST
+              value: "sl-us-south-1-portal.19.dblayer.com"
+            - name: DB_PORT
+              value: "33783"
+            - name: DB_NAME
+              value: "redmine_production"
+            - name: DB_USER
+              value: "redmine"
+            - name: DB_PASS
+              value: "p@ssw0rd"
+          volumeMounts:
+            - mountPath: /home/redmine/data
+              name: data
+
