@@ -1,4 +1,1 @@
-# おちんぎんほしい
-# すしざんまい
-# test
-# test-123456
+ansible-test
